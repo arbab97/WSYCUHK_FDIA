@@ -41,7 +41,7 @@ def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
 
 import scipy.io as sio 
 # Load data
-data_dir="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA/Data/data118_traintest.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
+data_dir="/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
 x_train = sio.loadmat(data_dir)['x_train']
 y_train= sio.loadmat(data_dir)['y_train']
 x_test = sio.loadmat(data_dir)['x_test']
@@ -79,18 +79,19 @@ model.compile(loss='binary_crossentropy',
 # Train, evaluate, predict
 import numpy as np
 reduce_lr=keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
-model.fit(np.expand_dims(x_train,axis=2), y_train, batch_size=100, epochs=1,callbacks=[reduce_lr]) #default epoch 200
+model.fit(np.expand_dims(x_train,axis=2), y_train, batch_size=100, epochs=2,callbacks=[reduce_lr]) #default epoch 200
 score = model.evaluate(np.expand_dims(x_test,axis=2), y_test, batch_size=100)
 pred_y=model.predict(np.expand_dims(x_test,axis=2), batch_size=100)
 
 # The threshold can be changed to generate ROC curve, in this file, the threshold is set as 0.5
-for i in range(2000):
+for i in range(10000): #(2000)
     for j in range (180):
         if pred_y[i][j]>0.5:
             pred_y[i][j]=1
         else:
             pred_y[i][j]=0
 row,acca=cal_acc(pred_y,y_test)
-
+print("Test Row Accuracy: ", row)
+print("Test individual accuracy: ", acca)
 #Save the result
-sio.savemat('./data/118caseresult_weighted', {'output_mode':pred_y,'output_mode_pred': y_test})
+sio.savemat('./118caseresult_weighted_test', {'output_mode':pred_y,'output_mode_pred': y_test})
