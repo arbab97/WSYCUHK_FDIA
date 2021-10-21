@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 # This is the code for S. Wang, S. Bi and Y. A. Zhang, "Locational Detection of False Data Injection Attack in Smart Grid: a Multi-label Classification Approach," in IEEE Internet of Things Journal.
+#Some scripts taken from : https://pythonprogramming.net/recurrent-neural-network-deep-learning-python-tensorflow-keras/
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Embedding
-from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D, LSTM, Dropout
+from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D, LSTM, Dropout, CuDNNLSTM
 from keras import losses
 from sklearn import preprocessing
+from keras.optimizers import adam
+import numpy as np
+
 #from keras import backend as K
 import keras
 
@@ -42,13 +46,16 @@ def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
 
 import scipy.io as sio 
 # Load data
-data_dir="/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
+data_dir="/content/data118_traintest.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
+
+
 x_train = sio.loadmat(data_dir)['x_train']
 y_train= sio.loadmat(data_dir)['y_train']
 x_test = sio.loadmat(data_dir)['x_test']
 y_test = sio.loadmat(data_dir)['y_test']
 
 x_train = preprocessing.scale(x_train)
+x_test = preprocessing.scale(x_test)
 
 # Define the network struture
 # #In this example, the network is 4 layers 1DCNN + 1 Flatten Layer + 1 Fully Connected Layer
@@ -70,19 +77,37 @@ x_train = preprocessing.scale(x_train)
 model = Sequential()
 
 
-model.add(LSTM(128, input_shape=(180,1), activation='relu', return_sequences=True))
+model.add(CuDNNLSTM(128, input_shape=(180,1), return_sequences=False))
 model.add(Dropout(0.2))
 
-model.add(LSTM(128, activation='relu'))
-model.add(Dropout(0.1))
+# model.add(CuDNNLSTM(256))
+# model.add(Dropout(0.1))
 
-# model.add(Dense(32, activation='relu'))
+# model.add(Dense(256, activation='relu'))
 # model.add(Dropout(0.2))
 
-model.add(Dense(180, activation='softmax'))
+model.add(Dense(180, activation='sigmoid'))
 
 
 
+# import tensorflow as tf
+# opt = tf.keras.optimizers.Adam(lr=0.001, decay=1e-6)
+opt = adam(lr=0.01, decay=1e-6)
+
+
+# Compile model
+model.compile(
+    loss='binary_crossentropy',
+    optimizer=opt,
+    metrics=['accuracy'],
+)
+model.fit(np.expand_dims(x_train,axis=2),
+          y_train,
+          epochs=3,
+          validation_data=(np.expand_dims(x_test,axis=2), y_test))
+
+import sys
+sys.exit()
 # Choose the loss function
 # =============================================================================
 # model.compile(loss=weight_loss,
@@ -92,6 +117,9 @@ model.add(Dense(180, activation='softmax'))
 model.compile(loss='binary_crossentropy',
                optimizer='adam',
               metrics=['accuracy'])
+
+
+
 
 # Train, evaluate, predict
 import numpy as np
