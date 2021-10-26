@@ -2,6 +2,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import sklearn.metrics as metrics
+import scipy.io as sio 
+from sklearn.metrics import f1_score
 data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results/"
 metadata={
 
@@ -13,7 +16,7 @@ metadata={
 
 
 
-plot_turn='barplot'
+plot_turn='roc'
 
 if plot_turn=='2axis':
     meta_selected=metadata[plot_turn]
@@ -55,6 +58,8 @@ elif plot_turn=='barplot':
     ax.set_xlabel("Number of LSTM Units")
     plt.title("Comparision of Computational parameters for different LSTM Architectures")
     plt.show()
+
+
 
     # plt.savefig(data_directory+ "All LSTM Models Commulative"+'.jpeg')
 # https://stackoverflow.com/questions/24183101/pandas-bar-plot-with-two-bars-and-two-y-axis

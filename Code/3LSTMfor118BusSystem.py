@@ -98,7 +98,7 @@ for units in [128, 64, 32, 16]:
     pred_y=model.predict(np.expand_dims(x_test,axis=2), batch_size=100)
 
     #Save the result
-    # sio.savemat('./118caseresult_weighted_test', {'output_mode':pred_y,'output_mode_pred': y_test})
+    sio.savemat(output_dir+"output_LSTM_"+str(units), {'output_mode':pred_y,'output_mode_pred': y_test})
 
 
     # The threshold can be changed to generate ROC curve, in this file, the threshold is set as 0.5
