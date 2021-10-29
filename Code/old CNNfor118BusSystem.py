@@ -58,9 +58,9 @@ model.add(Conv1D(128, 5, activation='relu', input_shape=(x_train.shape[1], 1)))
 #model.add(MaxPooling1D(3))
 #model.add(Conv1D(128, 3, activation='relu'))
 #model.add(Conv1D(128, 3, activation='relu'))
-model.add(Conv1D(256, 3, activation='relu'))
 model.add(Conv1D(128, 3, activation='relu'))
-model.add(Conv1D(128, 3, activation='relu'))
+# model.add(Conv1D(128, 3, activation='relu'))
+# model.add(Conv1D(128, 3, activation='relu'))
 model.add(Flatten())
 model.add(Dense(180, activation='sigmoid'))
 
@@ -79,7 +79,7 @@ model.compile(loss='binary_crossentropy',
 # Train, evaluate, predict
 import numpy as np
 reduce_lr=keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
-model.fit(np.expand_dims(x_train,axis=2), y_train, batch_size=100, epochs=2,callbacks=[reduce_lr]) #default epoch 200
+model.fit(np.expand_dims(x_train,axis=2), y_train, batch_size=100, epochs=10,callbacks=[reduce_lr]) #default epoch 200
 score = model.evaluate(np.expand_dims(x_test,axis=2), y_test, batch_size=100)
 pred_y=model.predict(np.expand_dims(x_test,axis=2), batch_size=100)
 
@@ -94,4 +94,4 @@ row,acca=cal_acc(pred_y,y_test)
 print("Test Row Accuracy: ", row)
 print("Test individual accuracy: ", acca)
 #Save the result
-sio.savemat('./118caseresult_weighted_test', {'output_mode':pred_y,'output_mode_pred': y_test})
+# sio.savemat('./118caseresult_weighted_test', {'output_mode':pred_y,'output_mode_pred': y_test})
