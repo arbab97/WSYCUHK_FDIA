@@ -1,9 +1,11 @@
+# linear regression for multioutput regression
+# from sklearn.datasets import make_regression
+from sklearn.linear_model import LinearRegression
+
 # -*- coding: utf-8 -*-
 # This is the code for S. Wang, S. Bi and Y. A. Zhang, "Locational Detection of False Data Injection Attack in Smart Grid: a Multi-label Classification Approach," in IEEE Internet of Things Journal.
 #Some scripts taken from : https://pythonprogramming.net/recurrent-neural-network-deep-learning-python-tensorflow-keras/
 ##Preprocessing: https://stats.stackexchange.com/questions/267012/difference-between-preprocessing-train-and-test-set-before-and-after-splitting
-
-
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Embedding
@@ -51,7 +53,7 @@ import scipy.io as sio
 # Load data
 # data_dir="/content/data118_traintest.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
 data_dir="/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
-output_dir="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results2/"
+output_dir="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_resultsLR/"
 
 x_train = sio.loadmat(data_dir)['x_train']
 y_train= sio.loadmat(data_dir)['y_train']
@@ -74,38 +76,28 @@ all_results=pd.DataFrame(columns={
 "Time Taken",
 "F1 Score"}) 
 
-Epochs=5
+Epochs=10
 for units in [128]:#, 64, 32, 16]:
-    #LSTM model
-    model = Sequential()
-    shape=180 #180
-    model.add(Conv1D(128, 5, activation='relu', input_shape=(shape,1)))
-    model.add(Conv1D(128, 3, activation='relu'))
-    model.add(Flatten())
-    model.add(Dense(shape, activation='sigmoid'))
-
-
-    # =============================================================================
-    model.compile(loss='binary_crossentropy',
-                optimizer='adam',
-                metrics=['accuracy'])
-
-    # Train, evaluate, predict
-    reduce_lr=keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
     start_time=time.time()
-    history=(model.fit(np.expand_dims(x_train,axis=2), y_train, batch_size=100, epochs=Epochs,callbacks=[reduce_lr],
-    validation_split=0.3
-    )) #default epoch 200
+    shape=180
+    # create datasets
+    # define model
+    model = LinearRegression()
+    # fit model
+    model.fit(x_train, y_train)
+
+    pred_y = model.predict(x_test)
+    # summarize prediction
+
+
     end_time=time.time()
-    score = model.evaluate(np.expand_dims(x_test,axis=2), y_test, batch_size=100)
-    pred_y=model.predict(np.expand_dims(x_test,axis=2), batch_size=100)
 
     #Save the result
     sio.savemat(output_dir+"output_LSTM_"+str(units), {'output_mode':pred_y,'output_mode_pred': y_test})
 
 
     # The threshold can be changed to generate ROC curve, in this file, the threshold is set as 0.5
-    for i in range(10000): #(2000)
+    for i in range(10000): #!CHANGE THIS CONSTANT TO A VARIABLE
         for j in range (shape):
             if pred_y[i][j]>0.5:
                 pred_y[i][j]=1
@@ -114,6 +106,7 @@ for units in [128]:#, 64, 32, 16]:
     row,acca=cal_acc(pred_y,y_test)
     print("Test Row Accuracy: ", row)
     print("Test individual accuracy: ", acca)
+    print("Warning: Tested till here .... ")
 
 
     model_stats=pd.DataFrame({

@@ -2,12 +2,19 @@
 # This is the code for S. Wang, S. Bi and Y. A. Zhang, "Locational Detection of False Data Injection Attack in Smart Grid: a Multi-label Classification Approach," in IEEE Internet of Things Journal.
 #Some scripts taken from : https://pythonprogramming.net/recurrent-neural-network-deep-learning-python-tensorflow-keras/
 ##Preprocessing: https://stats.stackexchange.com/questions/267012/difference-between-preprocessing-train-and-test-set-before-and-after-splitting
+#https://pypi.org/project/keras-self-attention/
+#https://github.com/tensorflow/tensorflow/issues/40911
+#Example: https://stackoverflow.com/questions/56946995/how-to-build-a-attention-model-with-keras
+#https://matthewmcateer.me/blog/getting-started-with-attention-for-classification/    #!!
+#https://stackoverflow.com/questions/59811773/how-to-use-keras-attention-layer-on-top-of-lstm-gru   #example of encoder-decoder classifier #!!
+#https://stackoverflow.com/questions/63060083/create-an-lstm-layer-with-attention-in-keras-for-multi-label-text-classification/64853996#64853996 #simple multi-label classificaiton with attention
 
+#https://stackoverflow.com/questions/62948332/how-to-add-attention-layer-to-a-bi-lstm/62949137#62949137 #Better version. of the ABOVE #!!!!!
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Embedding
-from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D, LSTM, Dropout, CuDNNLSTM
+from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D, LSTM, Dropout, CuDNNLSTM, Bidirectional
 from keras import losses
 from sklearn import preprocessing
 from keras.optimizers import adam
@@ -17,6 +24,36 @@ import time
 import keras
 from sklearn.metrics import f1_score
 import pandas as pd
+from keras.layers import Layer
+from keras import backend as K
+
+class Attention(Layer):
+
+    def __init__(self, return_sequences=True):
+        self.return_sequences = return_sequences
+        super(Attention,self).__init__()
+        
+    def build(self, input_shape):
+        
+        self.W=self.add_weight(name="att_weight", shape=(input_shape[-1],1),
+                               initializer="normal")
+        self.b=self.add_weight(name="att_bias", shape=(input_shape[1],1),
+                               initializer="zeros")
+        
+        super(Attention,self).build(input_shape)
+        
+    def call(self, x):
+        
+        e = K.tanh(K.dot(x,self.W)+self.b)
+        a = K.softmax(e, axis=1)
+        output = x*a
+        
+        if self.return_sequences:
+            return output
+        
+        return K.sum(output, axis=1)
+
+
 def test2train(save_name):
     y_pred = sio.loadmat(save_name)['output_mode_pred']
     return y_pred
@@ -74,16 +111,53 @@ all_results=pd.DataFrame(columns={
 "Time Taken",
 "F1 Score"}) 
 
-Epochs=5
+Epochs=10
 for units in [128]:#, 64, 32, 16]:
-    #LSTM model
-    model = Sequential()
+    
+    # #dnn model
+    # model = Sequential()
+    # shape=180 #180
+    # model.add(Dense(128,  activation='relu', input_shape=(shape,1) ))
+    # # model.add(Dense(128, activation='relu'))
+    # model.add(Flatten())
+    # model.add(Dense(shape, activation='sigmoid'))
+    
+    # model = Sequential()
+    # shape=180 #180
+    # model.add(Conv1D(128, 5, activation='relu', input_shape=(shape,1)))
+    # # model.add(Conv1D(128, 3, activation='relu'))
+    # model.add(Flatten())
+    # model.add(Dense(shape, activation='sigmoid'))
+
+
+    # # simple lstm
+    # shape=180 #180
+    # model = Sequential()
+    # model.add(LSTM(128, input_shape=(shape,1), return_sequences=False))
+    # # model.add(CuDNNLSTM(128, input_shape=(180,1), return_sequences=False)) Colab Equivalent
+    # # model.add(LSTM(16, return_sequences=False))
+    # # model.add(Dropout(0.2))
+    # model.add(Dense(shape, activation='sigmoid'))
+
+    #attention based return_sequences=T/F
     shape=180 #180
-    model.add(Conv1D(128, 5, activation='relu', input_shape=(shape,1)))
-    model.add(Conv1D(128, 3, activation='relu'))
+    model = Sequential()
+    # model.add(Embedding(max_words, emb_dim, input_length=max_len))
+    model.add(Bidirectional(LSTM(128, return_sequences=True, input_shape=(shape,1))))
+    model.add(Attention(return_sequences=True)) # receive 3D and output 2D
     model.add(Flatten())
     model.add(Dense(shape, activation='sigmoid'))
+    # model.summary()
+ 
 
+    # #attention based returnseqTrue
+    # shape=180 #180
+    # model = Sequential()
+    # model.add(Bidirectional(LSTM(128, return_sequences=True)))
+    # model.add(Attention(return_sequences=True)) # receive 3D and output 3D
+    # model.add(LSTM(32))
+    # model.add(Dense(shape, activation='sigmoid'))
+    # # model.summary()
 
     # =============================================================================
     model.compile(loss='binary_crossentropy',
