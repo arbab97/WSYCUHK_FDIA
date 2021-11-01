@@ -1,11 +1,11 @@
-// Example program
 #include <iostream>
-#include <string>
+#include <iomanip>
 using namespace std;
-int main()
-{
-cout<<"Test"<<endl;
+
+int main(){
+
+double x=25;
+cout<<fixed<<setprecision(5)<<x<<endl;
+
+
 }
-
-
-// ( (CONDITION 1) || (CONDITION 2)  )

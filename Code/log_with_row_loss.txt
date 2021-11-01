@@ -1,0 +1,49 @@
+2021-11-01 16:49:21.833154: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2021-11-01 16:49:21.833517: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55a83cb7a5c0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2021-11-01 16:49:21.833553: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce GTX 1650, Compute Capability 7.5
+2021-11-01 16:49:21.833673: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2021-11-01 16:49:21.833680: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      
+Train on 70000 samples, validate on 30000 samples
+Epoch 1/20
+70000/70000 [==============================] - 68s 968us/step - loss: 0.2135 - binary_accuracy: 0.9825 - row_accuracy: 0.4085 - val_loss: 0.1439 - val_binary_accuracy: 0.9952 - val_row_accuracy: 0.5588
+Epoch 2/20
+70000/70000 [==============================] - 68s 975us/step - loss: 0.1171 - binary_accuracy: 0.9965 - row_accuracy: 0.6388 - val_loss: 0.1047 - val_binary_accuracy: 0.9970 - val_row_accuracy: 0.6767
+Epoch 3/20
+70000/70000 [==============================] - 69s 980us/step - loss: 0.0910 - binary_accuracy: 0.9976 - row_accuracy: 0.7166 - val_loss: 0.0945 - val_binary_accuracy: 0.9974 - val_row_accuracy: 0.7073
+Epoch 4/20
+70000/70000 [==============================] - 71s 1ms/step - loss: 0.0765 - binary_accuracy: 0.9981 - row_accuracy: 0.7607 - val_loss: 0.0892 - val_binary_accuracy: 0.9976 - val_row_accuracy: 0.7227
+Epoch 5/20
+70000/70000 [==============================] - 73s 1ms/step - loss: 0.0668 - binary_accuracy: 0.9985 - row_accuracy: 0.7904 - val_loss: 0.0860 - val_binary_accuracy: 0.9978 - val_row_accuracy: 0.7319
+Epoch 6/20
+70000/70000 [==============================] - 80s 1ms/step - loss: 0.0607 - binary_accuracy: 0.9986 - row_accuracy: 0.8089 - val_loss: 0.0885 - val_binary_accuracy: 0.9977 - val_row_accuracy: 0.7239
+Epoch 7/20
+70000/70000 [==============================] - 72s 1ms/step - loss: 0.0546 - binary_accuracy: 0.9988 - row_accuracy: 0.8278 - val_loss: 0.0816 - val_binary_accuracy: 0.9979 - val_row_accuracy: 0.7457
+Epoch 8/20
+70000/70000 [==============================] - 76s 1ms/step - loss: 0.0510 - binary_accuracy: 0.9989 - row_accuracy: 0.8386 - val_loss: 0.0827 - val_binary_accuracy: 0.9979 - val_row_accuracy: 0.7419
+Epoch 9/20
+70000/70000 [==============================] - 72s 1ms/step - loss: 0.0469 - binary_accuracy: 0.9990 - row_accuracy: 0.8517 - val_loss: 0.0822 - val_binary_accuracy: 0.9979 - val_row_accuracy: 0.7436
+Epoch 10/20
+70000/70000 [==============================] - 71s 1ms/step - loss: 0.0434 - binary_accuracy: 0.9991 - row_accuracy: 0.8624 - val_loss: 0.0856 - val_binary_accuracy: 0.9979 - val_row_accuracy: 0.7330
+Epoch 11/20
+70000/70000 [==============================] - 72s 1ms/step - loss: 0.0411 - binary_accuracy: 0.9992 - row_accuracy: 0.8694 - val_loss: 0.0813 - val_binary_accuracy: 0.9980 - val_row_accuracy: 0.7474
+Epoch 12/20
+70000/70000 [==============================] - 72s 1ms/step - loss: 0.0363 - binary_accuracy: 0.9993 - row_accuracy: 0.8847 - val_loss: 0.0804 - val_binary_accuracy: 0.9980 - val_row_accuracy: 0.7498
+Epoch 13/20
+70000/70000 [==============================] - 72s 1ms/step - loss: 0.0348 - binary_accuracy: 0.9993 - row_accuracy: 0.8893 - val_loss: 0.0805 - val_binary_accuracy: 0.9980 - val_row_accuracy: 0.7502
+Epoch 14/20
+70000/70000 [==============================] - 71s 1ms/step - loss: 0.0333 - binary_accuracy: 0.9994 - row_accuracy: 0.8938 - val_loss: 0.0806 - val_binary_accuracy: 0.9980 - val_row_accuracy: 0.7495
+Epoch 15/20
+70000/70000 [==============================] - 71s 1ms/step - loss: 0.0313 - binary_accuracy: 0.9994 - row_accuracy: 0.9004 - val_loss: 0.0862 - val_binary_accuracy: 0.9979 - val_row_accuracy: 0.7329
+Epoch 16/20
+70000/70000 [==============================] - 72s 1ms/step - loss: 0.0303 - binary_accuracy: 0.9994 - row_accuracy: 0.9032 - val_loss: 0.0828 - val_binary_accuracy: 0.9980 - val_row_accuracy: 0.7431
+Epoch 17/20
+70000/70000 [==============================] - 71s 1ms/step - loss: 0.0269 - binary_accuracy: 0.9995 - row_accuracy: 0.9142 - val_loss: 0.0820 - val_binary_accuracy: 0.9980 - val_row_accuracy: 0.7462
+Epoch 18/20
+70000/70000 [==============================] - 71s 1ms/step - loss: 0.0120 - binary_accuracy: 0.9998 - row_accuracy: 0.9621 - val_loss: 0.0683 - val_binary_accuracy: 0.9984 - val_row_accuracy: 0.7888
+Epoch 19/20
+70000/70000 [==============================] - 74s 1ms/step - loss: 0.0073 - binary_accuracy: 0.9999 - row_accuracy: 0.9770 - val_loss: 0.0681 - val_binary_accuracy: 0.9984 - val_row_accuracy: 0.7896
+Epoch 20/20
+70000/70000 [==============================] - 71s 1ms/step - loss: 0.0064 - binary_accuracy: 0.9999 - row_accuracy: 0.9800 - val_loss: 0.0679 - val_binary_accuracy: 0.9984 - val_row_accuracy: 0.7905
+10000/10000 [==============================] - 2s 170us/step
+Test Row Accuracy:  0.788
+Test individual accuracy:  0.998375

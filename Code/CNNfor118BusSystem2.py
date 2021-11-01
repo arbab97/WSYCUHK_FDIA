@@ -2,7 +2,7 @@
 # This is the code for S. Wang, S. Bi and Y. A. Zhang, "Locational Detection of False Data Injection Attack in Smart Grid: a Multi-label Classification Approach," in IEEE Internet of Things Journal.
 #Some scripts taken from : https://pythonprogramming.net/recurrent-neural-network-deep-learning-python-tensorflow-keras/
 ##Preprocessing: https://stats.stackexchange.com/questions/267012/difference-between-preprocessing-train-and-test-set-before-and-after-splitting
-
+#Optimized implmeentationa for row accuracy: https://stackoverflow.com/questions/60184719/custom-keras-metric-for-row-accuracy
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
@@ -13,10 +13,13 @@ from sklearn import preprocessing
 from keras.optimizers import adam
 import numpy as np
 import time
-#from keras import backend as K
+from keras import backend as K
 import keras
 from sklearn.metrics import f1_score
 import pandas as pd
+import tensorflow as tf
+from keras.metrics import categorical_accuracy
+from keras.metrics import binary_accuracy
 def test2train(save_name):
     y_pred = sio.loadmat(save_name)['output_mode_pred']
     return y_pred
@@ -40,11 +43,29 @@ def cal_acc(a,b):
             
     return 1-r_err/n, 1-tterr/(n*m)
 
+
+def row_accuracy(y_true, y_pred):
+    y_pred = K.round(y_pred)
+    acc = K.all(K.equal(y_true, y_pred), axis=1)
+    acc= K.cast(acc, 'float32')
+    acc = K.sum(acc)
+    acc = acc/K.cast(K.shape(y_true)[0], 'float32')
+    return acc
+
 def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
     import tensorflow as tf
     mask_a=tf.greater_equal(a,0.5)
     mask_b=tf.less(a,0.5)
     return (5*losses.binary_crossentropy(tf.boolean_mask(a,mask_a),tf.boolean_mask(b,mask_a))+losses.binary_crossentropy(tf.boolean_mask(a,mask_b),tf.boolean_mask(b,mask_b)))/6
+
+bce = keras.losses.BinaryCrossentropy(from_logits=False)
+
+def binary_crossentropy_with_row_accuracy(y_true, y_pred):    
+    alpha=0.7
+    return( ((1-alpha)*bce(y_true, y_pred) )
+     + (alpha* (1-row_accuracy(y_true, y_pred))) )#.numpy()
+
+
 
 
 import scipy.io as sio 
@@ -74,7 +95,7 @@ all_results=pd.DataFrame(columns={
 "Time Taken",
 "F1 Score"}) 
 
-Epochs=5
+Epochs=20
 for units in [128]:#, 64, 32, 16]:
     #LSTM model
     model = Sequential()
@@ -86,9 +107,9 @@ for units in [128]:#, 64, 32, 16]:
 
 
     # =============================================================================
-    model.compile(loss='binary_crossentropy',
+    model.compile( loss=  binary_crossentropy_with_row_accuracy,                 #loss='binary_crossentropy',
                 optimizer='adam',
-                metrics=['accuracy'])
+                metrics=   [binary_accuracy, row_accuracy])   #By default if a manual loss is used, then categorical accuracy is considered if only 'accuracy' is written.
 
     # Train, evaluate, predict
     reduce_lr=keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
@@ -114,6 +135,8 @@ for units in [128]:#, 64, 32, 16]:
     row,acca=cal_acc(pred_y,y_test)
     print("Test Row Accuracy: ", row)
     print("Test individual accuracy: ", acca)
+
+
 
 
     model_stats=pd.DataFrame({
