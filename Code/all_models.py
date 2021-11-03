@@ -125,7 +125,7 @@ x_test = norm.transform(x_test) #Preventing the x_test stats from leaking
 
 
 all_results=pd.DataFrame(columns={
-"Model"
+"Model",
 "Number of Units in a layer",
 "Row Accuracy", 
 "Test Accuracy",

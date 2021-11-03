@@ -13,23 +13,25 @@ from scipy import interp
 from sklearn.metrics import roc_auc_score
 import scipy.io as sio 
 # Import some data to play with
-data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results/"
-path=data_directory+"output_LSTM_128"
+data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/"
+path=data_directory+"output_MLP"
 pred_y= sio.loadmat(path)['output_mode']
 y_test= sio.loadmat(path)['output_mode_pred'] #ignore the naming; its messed up
 # Compute ROC curve and ROC area for each class
 fpr = dict()
 tpr = dict()
 roc_auc = dict()
-for i in range(y_test.shape[-1]):
-    fpr[i], tpr[i], _ = roc_curve(y_test[ i,:], pred_y[i, :])
-    roc_auc[i] = auc(fpr[i], tpr[i])
+#!!!!!!!!!!!!!!!!!!!!!!!!
+# for i in range(y_test.shape[-1]):
+#     fpr[i], tpr[i], _ = roc_curve(y_test[ i,:], pred_y[i, :])
+#     roc_auc[i] = auc(fpr[i], tpr[i])
 
 # Compute micro-average ROC curve and ROC area
-fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), pred_y.ravel())
-last_length=2000
+fpr["micro"], tpr["micro"], thresh = roc_curve(y_test.ravel(), pred_y.ravel())
+total_thresh=len(thresh)
+percent=1 #100%
 #sliciing
-fpr_sliced, tpr_sliced=fpr["micro"][-last_length:], tpr["micro"][-last_length:]
+fpr_sliced, tpr_sliced=fpr["micro"][int(-total_thresh*percent):], tpr["micro"][int(-total_thresh*percent):]
 
 roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])  #Here you can't pass sliced BECAUSE area is calculated for all values
 
