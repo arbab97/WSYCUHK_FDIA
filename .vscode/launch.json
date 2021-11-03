@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "all_models.py",
+            "type": "python",
+            "request": "launch",
+            "program": "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA/Code/all_models.py",//"${file}",
+            "console": "integratedTerminal",
+            // "args":["--model", "DNN", "--n_epoch", "2","--data_dir", "/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat", "--output_dir", "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/"],
+            "args": [
+                 "--model", "MLP",
+                 "--n_epoch", "1",
+                 "--data_dir", "/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat",
+                 "--output_dir", "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/"                 
+             ],
+            "justMyCode": true
+        }
+    ]
+}

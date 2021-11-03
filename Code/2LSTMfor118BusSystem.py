@@ -46,7 +46,7 @@ def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
 
 import scipy.io as sio 
 # Load data
-data_dir="/content/data118_traintest.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
+data_dir="/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"# "/content/data118_traintest.mat"
 
 
 x_train = sio.loadmat(data_dir)['x_train']
@@ -77,7 +77,7 @@ x_test = preprocessing.scale(x_test)
 model = Sequential()
 
 
-model.add(CuDNNLSTM(128, input_shape=(180,1), return_sequences=False))
+model.add(LSTM(128, input_shape=(180,1), return_sequences=False))
 model.add(Dropout(0.2))
 
 # model.add(CuDNNLSTM(256))
