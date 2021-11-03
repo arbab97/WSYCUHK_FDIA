@@ -61,7 +61,7 @@ def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
 bce = keras.losses.BinaryCrossentropy(from_logits=False)
 
 def binary_crossentropy_with_row_accuracy(y_true, y_pred):    
-    alpha=0.7
+    alpha=0.2
     return( ((1-alpha)*bce(y_true, y_pred) )
      + (alpha* (1-row_accuracy(y_true, y_pred))) )#.numpy()
 
@@ -71,8 +71,8 @@ def binary_crossentropy_with_row_accuracy(y_true, y_pred):
 import scipy.io as sio 
 # Load data
 # data_dir="/content/data118_traintest.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
-data_dir="/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
-output_dir="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results2/"
+data_dir="/content/data118_traintest.mat"
+output_dir="/content/"
 
 x_train = sio.loadmat(data_dir)['x_train']
 y_train= sio.loadmat(data_dir)['y_train']
@@ -95,19 +95,20 @@ all_results=pd.DataFrame(columns={
 "Time Taken",
 "F1 Score"}) 
 
-Epochs=20
+Epochs=50
 for units in [128]:#, 64, 32, 16]:
     #LSTM model
     model = Sequential()
     shape=180 #180
     model.add(Conv1D(128, 5, activation='relu', input_shape=(shape,1)))
+    model.add(Dropout(0.2))
     model.add(Conv1D(128, 3, activation='relu'))
     model.add(Flatten())
     model.add(Dense(shape, activation='sigmoid'))
 
 
     # =============================================================================
-    model.compile( loss=  binary_crossentropy_with_row_accuracy,                 #loss='binary_crossentropy',
+    model.compile( loss='binary_crossentropy'  ,#binary_crossentropy_with_row_accuracy,                 #loss='binary_crossentropy',
                 optimizer='adam',
                 metrics=   [binary_accuracy, row_accuracy])   #By default if a manual loss is used, then categorical accuracy is considered if only 'accuracy' is written.
 
@@ -122,7 +123,7 @@ for units in [128]:#, 64, 32, 16]:
     pred_y=model.predict(np.expand_dims(x_test,axis=2), batch_size=100)
 
     #Save the result
-    sio.savemat(output_dir+"output_LSTM_"+str(units), {'output_mode':pred_y,'output_mode_pred': y_test})
+    # sio.savemat(output_dir+"output_LSTM_"+str(units), {'output_mode':pred_y,'output_mode_pred': y_test})
 
 
     # The threshold can be changed to generate ROC curve, in this file, the threshold is set as 0.5
@@ -136,7 +137,7 @@ for units in [128]:#, 64, 32, 16]:
     print("Test Row Accuracy: ", row)
     print("Test individual accuracy: ", acca)
 
-
+    exit()
 
 
     model_stats=pd.DataFrame({

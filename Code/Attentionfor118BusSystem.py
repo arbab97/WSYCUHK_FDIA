@@ -20,7 +20,7 @@ from sklearn import preprocessing
 from keras.optimizers import adam
 import numpy as np
 import time
-#from keras import backend as K
+from keras import backend as K
 import keras
 from sklearn.metrics import f1_score
 import pandas as pd
@@ -83,12 +83,19 @@ def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
     mask_b=tf.less(a,0.5)
     return (5*losses.binary_crossentropy(tf.boolean_mask(a,mask_a),tf.boolean_mask(b,mask_a))+losses.binary_crossentropy(tf.boolean_mask(a,mask_b),tf.boolean_mask(b,mask_b)))/6
 
+def row_accuracy(y_true, y_pred):
+    y_pred = K.round(y_pred)
+    acc = K.all(K.equal(y_true, y_pred), axis=1)
+    acc= K.cast(acc, 'float32')
+    acc = K.sum(acc)
+    acc = acc/K.cast(K.shape(y_true)[0], 'float32')
+    return acc
 
 import scipy.io as sio 
 # Load data
 # data_dir="/content/data118_traintest.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
-data_dir="/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
-output_dir="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results2/"
+data_dir="/content/data118_traintest.mat"
+output_dir="/content/"
 
 x_train = sio.loadmat(data_dir)['x_train']
 y_train= sio.loadmat(data_dir)['y_train']
@@ -143,7 +150,7 @@ for units in [128]:#, 64, 32, 16]:
     shape=180 #180
     model = Sequential()
     # model.add(Embedding(max_words, emb_dim, input_length=max_len))
-    model.add(Bidirectional(LSTM(128, return_sequences=True, input_shape=(shape,1))))
+    model.add(Bidirectional(CuDNNLSTM(128, return_sequences=True, input_shape=(shape,1))))
     model.add(Attention(return_sequences=True)) # receive 3D and output 2D
     model.add(Flatten())
     model.add(Dense(shape, activation='sigmoid'))
@@ -162,7 +169,7 @@ for units in [128]:#, 64, 32, 16]:
     # =============================================================================
     model.compile(loss='binary_crossentropy',
                 optimizer='adam',
-                metrics=['accuracy'])
+                metrics=['accuracy', row_accuracy])
 
     # Train, evaluate, predict
     reduce_lr=keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)

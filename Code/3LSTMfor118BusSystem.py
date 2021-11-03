@@ -10,6 +10,7 @@ from keras import losses
 from sklearn import preprocessing
 from keras.optimizers import adam
 import numpy as np
+from keras import backend as K
 import time
 #from keras import backend as K
 import keras
@@ -37,7 +38,13 @@ def cal_acc(a,b):
             r_err+=1
             
     return 1-r_err/n, 1-tterr/(n*m)
-
+def row_accuracy(y_true, y_pred):
+    y_pred = K.round(y_pred)
+    acc = K.all(K.equal(y_true, y_pred), axis=1)
+    acc= K.cast(acc, 'float32')
+    acc = K.sum(acc)
+    acc = acc/K.cast(K.shape(y_true)[0], 'float32')
+    return acc
 def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
     import tensorflow as tf
     mask_a=tf.greater_equal(a,0.5)
@@ -48,8 +55,8 @@ def weight_loss(a,b):#Self-defined loss function to handle the unbalance labels
 import scipy.io as sio 
 # Load data
 # data_dir="/content/data118_traintest.mat"#"/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat"
-data_dir="/media/rabi/Data/11111/openuae/datafromdrive/data14_2.mat"
-output_dir="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results/"
+data_dir="/content/data118_traintest.mat"
+output_dir="/content/"
 
 x_train = sio.loadmat(data_dir)['x_train']
 y_train= sio.loadmat(data_dir)['y_train']
@@ -72,20 +79,20 @@ all_results=pd.DataFrame(columns={
 "Time Taken",
 "F1 Score"}) 
 
-Epochs=10
-for units in [128, 64, 32, 16]:
+Epochs=50
+for units in [128]:#, 64, 32, 16]:
     #LSTM model
     model = Sequential()
-    shape=19 #180
-    model.add(LSTM(units, input_shape=(shape,1), return_sequences=False))
-    # model.add(CuDNNLSTM(128, input_shape=(180,1), return_sequences=False)) Colab Equivalent
+    shape=180 #180
+    # model.add(LSTM(units, input_shape=(shape,1), return_sequences=False))
+    model.add(CuDNNLSTM(units, input_shape=(shape,1), return_sequences=False)) #Colab Equivalent
     # model.add(LSTM(16, return_sequences=False))
     model.add(Dropout(0.2))
     model.add(Dense(shape, activation='sigmoid'))
     # =============================================================================
     model.compile(loss='binary_crossentropy',
                 optimizer='adam',
-                metrics=['accuracy'])
+                metrics=['accuracy', row_accuracy])
 
     # Train, evaluate, predict
     reduce_lr=keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0)
@@ -111,7 +118,7 @@ for units in [128, 64, 32, 16]:
     row,acca=cal_acc(pred_y,y_test)
     print("Test Row Accuracy: ", row)
     print("Test individual accuracy: ", acca)
-
+    exit()
 
     model_stats=pd.DataFrame({
     "Training Loss":history.history['loss'],
