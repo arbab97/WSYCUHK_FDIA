@@ -10,12 +10,11 @@
 #https://stackoverflow.com/questions/63060083/create-an-lstm-layer-with-attention-in-keras-for-multi-label-text-classification/64853996#64853996 #simple multi-label classificaiton with attention
 
 #https://stackoverflow.com/questions/62948332/how-to-add-attention-layer-to-a-bi-lstm/62949137#62949137 #Better version. of the ABOVE #!!!!!
-#https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
-#https://towardsdatascience.com/cnn-lstm-predicting-daily-hotel-cancellations-e1c75697f124
+
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Embedding
-from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D, LSTM, Dropout, CuDNNLSTM, Bidirectional, TimeDistributed
+from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D, LSTM, Dropout, CuDNNLSTM, Bidirectional
 from keras import losses
 from sklearn import preprocessing
 from keras.optimizers import adam
@@ -158,7 +157,7 @@ elif args.model=="CNN":
     model.add(Dense(shape, activation='sigmoid'))
 
 elif args.model=="LSTM":
-    model.add(LSTM(128, input_shape=(shape,1), return_sequences=False)) 
+    model.add(LSTM(units, input_shape=(shape,1), return_sequences=False)) 
     # model.add(CuDNNLSTM(units, input_shape=(shape,1), return_sequences=False)) #Colab Equivalent
     model.add(Dropout(0.2))
     model.add(Dense(shape, activation='sigmoid'))
@@ -170,15 +169,6 @@ elif args.model=="Attention":
     model.add(Flatten())
     model.add(Dense(shape, activation='sigmoid'))
 
-elif args.model=="cnn-lstm":   
-
-    model = Sequential()
-    # define CNN model
-    model.add((Conv1D(128, 5, activation='relu', input_shape=(shape,1))))
-        
-    # define LSTM model
-    model.add(LSTM(128, return_sequences=False))
-    model.add(Dense(shape, activation='sigmoid'))
 
 else:
     print("Please enter the correct mdoel")
