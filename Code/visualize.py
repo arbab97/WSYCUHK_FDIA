@@ -5,18 +5,18 @@ import pandas as pd
 import sklearn.metrics as metrics
 import scipy.io as sio 
 from sklearn.metrics import f1_score
-data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/results_3_nov-20211103T044231Z-001/results_3_nov/"
+data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/results_3_nov-20211103T044231Z-001/results_3_nov/cnn-lstm/"
 metadata={
 
-    "2axis" : { "file_name": "stats_MLP.csv",
+    "2axis" : { "file_name": "stats_cnn-lstm_118.csv",
                 "y_axis": ["Training Loss", "Validation Loss"],
-                "title": "Learning Curve for FDIA locational detection (IEEE-118)"
+                "title": "Learning Curve for CNN+LSTM Model (IEEE-118)"
             },
 }
 
 
 
-plot_turn='barplot'
+plot_turn='2axis'
 
 if plot_turn=='2axis':
     meta_selected=metadata[plot_turn]
@@ -37,8 +37,8 @@ if plot_turn=='2axis':
     plt.savefig(data_directory+ meta_selected["file_name"]+'.jpeg')
     
 elif plot_turn=='barplot':
-    plt.rcParams.update({'font.size': 9})
-    df = pd.read_csv("/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/results_3_nov-20211103T044231Z-001/results_3_nov/results_ALL (copy).csv")
+    plt.rcParams.update({'font.size': 14})
+    df = pd.read_csv("/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/results_3_nov-20211103T044231Z-001/results_3_nov/results_ALL_ieee14_sub.csv")
 
     fig = plt.figure() # Create matplotlib figure
     fig.subplots_adjust(right=0.75)
@@ -51,7 +51,7 @@ elif plot_turn=='barplot':
     width = 0.11
 
     df["Time Taken"].plot(kind='bar', color='black', ax=ax, width=width, position=1)
-    df["Number of Parameters"].plot(kind='bar', color='grey', ax=ax2, width=width, position=0)
+    df["Parameters"].plot(kind='bar', color='grey', ax=ax2, width=width, position=0)
     df["Row Accuracy"].plot(kind='bar', color='red', ax=ax3, width=width, position=2)
 
     ax.set_ylabel('Time Taken (Seconds)')

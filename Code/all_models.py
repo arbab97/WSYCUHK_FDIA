@@ -177,8 +177,28 @@ elif args.model=="cnn-lstm":
     model.add((Conv1D(128, 5, activation='relu', input_shape=(shape,1))))
         
     # define LSTM model
-    model.add(LSTM(128, return_sequences=False))
+    model.add(LSTM(128, return_sequences=False))   
+    # model.add(CuDNNLSTM(128, return_sequences=False))   #Colab Equivalent
     model.add(Dense(shape, activation='sigmoid'))
+
+elif args.model=="cnn-lstm-paper":   
+
+    model = Sequential()
+    # define CNN model
+    model.add((Conv1D(128, 5, activation='relu', input_shape=(shape,1))))
+    model.add((Conv1D(128, 5, activation='relu')))
+    model.add((Conv1D(128, 5, activation='relu')))
+    model.add((Conv1D(128, 5, activation='relu')))
+    model.add(Dense(shape, activation='relu'))
+    # define LSTM model
+    model.add(LSTM(128, return_sequences=True)) 
+    model.add(LSTM(128, return_sequences=True))
+    model.add(Flatten())   
+    # model.add(CuDNNLSTM(128, return_sequences=False))   #Colab Equivalent
+    model.add(Dense(shape, activation='relu'))
+    model.add(Dense(shape, activation='relu'))
+    model.add(Dense(shape, activation='sigmoid'))
+
 
 else:
     print("Please enter the correct mdoel")
