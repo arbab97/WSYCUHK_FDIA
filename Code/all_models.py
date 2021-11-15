@@ -199,6 +199,7 @@ elif args.model=="cnn-lstm-paper-experiments":
         model.add(Dense(args.neurons, activation='relu'))
         # define LSTM model
         model.add(chosen_lstm(args.neurons, return_sequences=True)) 
+        model.add(Dropout(0.2))
 
     model.add(Flatten())   
     model.add(Dense(args.shape, activation='sigmoid'))
@@ -242,8 +243,6 @@ end_time=time.time()
 score = model.evaluate(np.expand_dims(x_test,axis=2), y_test, batch_size=100)
 pred_y=model.predict(np.expand_dims(x_test,axis=2), batch_size=100)
 
-#Save the result
-sio.savemat(output_dir+"output_"+(args.model), {'output_mode':pred_y,'output_mode_pred': y_test})
 
 # The threshold can be changed to generate ROC curve, in this file, the threshold is set as 0.5
 for i in range(x_test.shape[0]): #(2000)
@@ -263,7 +262,6 @@ model_stats=pd.DataFrame({
 "Epoch":range(1,len(history.history['loss'])+1)},
 index=range(len(history.history['loss'])))
 #Saving model stats (since they are being saved for individual model)
-model_stats.to_csv(output_dir+"stats_"+(args.model)+".csv")
 
 
 single_result={
@@ -281,7 +279,12 @@ all_results=all_results.append(single_result, ignore_index=True)
 
 # keras.backend.clear_session() #destroying the old model
 
-#saving results outside the loop since they are stored for all model
-
-all_results.to_csv(output_dir+"results_"+(args.model)+".csv")
-
+save_id=args.model+"_"+str(args.layers)+"_"+str(args.neurons)
+#Save the learning curve stats
+model_stats.to_csv(output_dir+"stats_"+(save_id)+".csv")
+#Save the results
+all_results.to_csv(output_dir+"results_"+(save_id)+".csv")
+#Save the result
+sio.savemat(output_dir+"output_"+(save_id), {'output_mode':pred_y,'output_mode_pred': y_test})
+#Save the trained model
+model.save(output_dir+"model_"+(save_id))

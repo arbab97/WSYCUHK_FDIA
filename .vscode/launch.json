@@ -22,7 +22,7 @@
                  "--model", "cnn-lstm-paper-experiments",
                  "--n_epoch", "1",
                  "--data_dir", "/media/rabi/Data/11111/openuae/data_ieee14_118_locational_detection/data14_1.mat",
-                 "--output_dir", "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/",
+                 "--output_dir", "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/test/",
                  "--layers", "1",
                  "--neurons", "64", 
                  "--shape", "19",
