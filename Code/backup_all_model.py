@@ -12,7 +12,6 @@
 #https://stackoverflow.com/questions/62948332/how-to-add-attention-layer-to-a-bi-lstm/62949137#62949137 #Better version. of the ABOVE #!!!!!
 #https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
 #https://towardsdatascience.com/cnn-lstm-predicting-daily-hotel-cancellations-e1c75697f124
-
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Embedding
@@ -36,24 +35,11 @@ parser.add_argument('--model',type=str, help='Model Type', required=True)
 parser.add_argument('--data_dir', type=str, help='Input data Directory', required=True)
 parser.add_argument('--output_dir', type=str, help='Where to store the results', required=True)
 parser.add_argument('--n_epoch', type=int, help='number of epoches when maximizing', required=True)
-import sys
-
-IN_COLAB = 'google.colab' in sys.modules
-if IN_COLAB:
-    chosen_lstm=CuDNNLSTM
-    import tensorflow.compat.v1 as tf
-    tf.disable_v2_behavior()
-else:
-    chosen_lstm=LSTM
-    import tensorflow as tf
-
 args = parser.parse_args()
 print("You've selected: ", args.model)
 print("With Number of Epochs: ", str(args.n_epoch))
-# if args.model in ["LSTM","Attention", "cnn-lstm-paper"]:
-
-# else:
-    
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 # data_dir="/content/data118_traintest.mat"
 # output_dir="/content/"
 shape=19 # Input Shape 
@@ -173,7 +159,7 @@ elif args.model=="CNN":
 
 elif args.model=="LSTM":
     # model.add(LSTM(128, input_shape=(shape,1), return_sequences=False)) 
-    model.add(LSTM(128, input_shape=(shape,1), return_sequences=False)) #Colab Equivalent
+    model.add(CuDNNLSTM(128, input_shape=(shape,1), return_sequences=False)) #Colab Equivalent
     # model.add(LSTM(128, input_shape=(shape,1), return_sequences=False,activation='tanh', recurrent_activation = "sigmoid", recurrent_dropout = 0, unroll = False, use_bias =True))
   
   
@@ -184,22 +170,22 @@ elif args.model=="LSTM":
     model.add(Dense(shape, activation='sigmoid'))
 
 elif args.model=="Attention":   
-    model.add(Bidirectional(chosen_lstm(128, return_sequences=True, input_shape=(shape,1))))
+    model.add(Bidirectional(LSTM(128, return_sequences=True, input_shape=(shape,1))))
     # model.add(Bidirectional(CuDNNLSTM(128, return_sequences=True, input_shape=(shape,1))))  #Colab Equivalent
     model.add(Attention(return_sequences=True)) # receive 3D and output 2D
     model.add(Flatten())
     model.add(Dense(shape, activation='sigmoid'))
 
-# elif args.model=="cnn-lstm":   
+elif args.model=="cnn-lstm":   
 
-#     model = Sequential()
-#     # define CNN model
-#     model.add((Conv1D(128, 5, activation='relu', input_shape=(shape,1))))
+    model = Sequential()
+    # define CNN model
+    model.add((Conv1D(128, 5, activation='relu', input_shape=(shape,1))))
         
-#     # define LSTM model
-#     model.add(LSTM(128, return_sequences=False))   
-#     # model.add(CuDNNLSTM(128, return_sequences=False))   #Colab Equivalent
-#     model.add(Dense(shape, activation='sigmoid'))
+    # define LSTM model
+    model.add(LSTM(128, return_sequences=False))   
+    # model.add(CuDNNLSTM(128, return_sequences=False))   #Colab Equivalent
+    model.add(Dense(shape, activation='sigmoid'))
 
 elif args.model=="cnn-lstm-paper":   
 
@@ -211,8 +197,8 @@ elif args.model=="cnn-lstm-paper":
     model.add((Conv1D(128, 5, activation='relu')))
     model.add(Dense(shape, activation='relu'))
     # define LSTM model
-    model.add(chosen_lstm(128, return_sequences=True)) 
-    model.add(chosen_lstm(128, return_sequences=True))
+    model.add(LSTM(128, return_sequences=True)) 
+    model.add(LSTM(128, return_sequences=True))
     model.add(Flatten())   
     # model.add(CuDNNLSTM(128, return_sequences=False))   #Colab Equivalent
     model.add(Dense(shape, activation='relu'))
