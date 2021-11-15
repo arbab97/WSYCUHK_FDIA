@@ -12,7 +12,6 @@
 #https://stackoverflow.com/questions/62948332/how-to-add-attention-layer-to-a-bi-lstm/62949137#62949137 #Better version. of the ABOVE #!!!!!
 #https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
 #https://towardsdatascience.com/cnn-lstm-predicting-daily-hotel-cancellations-e1c75697f124
-
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Embedding
@@ -32,32 +31,36 @@ from keras import backend as K
 import scipy.io as sio 
 import argparse
 parser = argparse.ArgumentParser()
+
 parser.add_argument('--model',type=str, help='Model Type', required=True)
 parser.add_argument('--data_dir', type=str, help='Input data Directory', required=True)
 parser.add_argument('--output_dir', type=str, help='Where to store the results', required=True)
 parser.add_argument('--n_epoch', type=int, help='number of epoches when maximizing', required=True)
-import sys
-
-IN_COLAB = 'google.colab' in sys.modules
-if IN_COLAB:
-    chosen_lstm=CuDNNLSTM
-    import tensorflow.compat.v1 as tf
-    tf.disable_v2_behavior()
-else:
-    chosen_lstm=LSTM
-    import tensorflow as tf
+parser.add_argument('--layers', type=int, help='number of Layers in network', required=True)
+parser.add_argument('--neurons', type=int, help='number of units in each layer', required=True)
+parser.add_argument('--shape', type=int, help='specify shape according to IEEE 14(19) OR IEEE 118(180)', required=True)
 
 args = parser.parse_args()
 print("You've selected: ", args.model)
 print("With Number of Epochs: ", str(args.n_epoch))
-# if args.model in ["LSTM","Attention", "cnn-lstm-paper"]:
 
-# else:
-    
-# data_dir="/content/data118_traintest.mat"
-# output_dir="/content/"
-shape=19 # Input Shape 
-units=128 #Number of Neurons in single layer
+
+
+
+# import tensorflow.compat.v1 as tf
+# tf.disable_v2_behavior()
+
+import os
+if 'COLAB_GPU' in os.environ:
+  print("Running on Colab -------------")
+  chosen_lstm=CuDNNLSTM
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  print("NOT RUNNING ON COLAB")
+  chosen_lstm=LSTM
+  import tensorflow as tf
+
 class Attention(Layer):
 
     def __init__(self, return_sequences=True):
@@ -155,69 +158,69 @@ all_results=pd.DataFrame(columns={
 #attention based return_sequences=T/F
 model = Sequential()
 
-
 if args.model=="MLP":  #DNN
-    model.add(Dense(128,  activation='relu', input_shape=(shape,1) ))
-    model.add(Dropout(0.2))
-    model.add(Dense(128, activation='relu'))
+    for layer in range(args.layers):
+        model.add(Dense(args.neurons,  activation='relu', input_shape=(args.shape,1) ))
+        model.add(Dropout(0.2))
     model.add(Flatten())
-    model.add(Dense(shape, activation='sigmoid'))
+    model.add(Dense(args.shape, activation='sigmoid'))
 
 
 elif args.model=="CNN":
-    model.add(Conv1D(128, 5, activation='relu', input_shape=(shape,1)))
-    model.add(Dropout(0.2))
-    model.add(Conv1D(128, 3, activation='relu'))
+    for layer in range(args.layers):
+        model.add(Conv1D(args.neurons, 5, activation='relu', input_shape=(args.shape,1)))
+        model.add(Dropout(0.2))
     model.add(Flatten())
-    model.add(Dense(shape, activation='sigmoid'))
+    model.add(Dense(args.shape, activation='sigmoid'))
 
-elif args.model=="LSTM":
-    # model.add(LSTM(128, input_shape=(shape,1), return_sequences=False)) 
-    model.add(LSTM(128, input_shape=(shape,1), return_sequences=False)) #Colab Equivalent
-    # model.add(LSTM(128, input_shape=(shape,1), return_sequences=False,activation='tanh', recurrent_activation = "sigmoid", recurrent_dropout = 0, unroll = False, use_bias =True))
-  
-  
-  # Inputs are not masked or strictly right padded.
-
-
-    model.add(Dropout(0.2))
-    model.add(Dense(shape, activation='sigmoid'))
+elif args.model=="LSTM": 
+    for layer in range(args.layers):
+        model.add(chosen_lstm(args.neurons, input_shape=(args.shape,1), return_sequences=True)) #Colab Equivalent
+        model.add(Dropout(0.2))
+    model.add(Flatten())
+    model.add(Dense(args.shape, activation='sigmoid'))
 
 elif args.model=="Attention":   
-    model.add(Bidirectional(chosen_lstm(128, return_sequences=True, input_shape=(shape,1))))
-    # model.add(Bidirectional(CuDNNLSTM(128, return_sequences=True, input_shape=(shape,1))))  #Colab Equivalent
-    model.add(Attention(return_sequences=True)) # receive 3D and output 2D
+    for layer in range(args.layers):
+        model.add(Bidirectional(chosen_lstm(args.neurons, return_sequences=True, input_shape=(args.shape,1))))
+        model.add(Attention(return_sequences=True)) # receive 3D and output 2D
+        model.add(Dropout(0.2))
+
+    # model.add(Attention(return_sequences=True)) # receive 3D and output 2D
     model.add(Flatten())
-    model.add(Dense(shape, activation='sigmoid'))
+    model.add(Dense(args.shape, activation='sigmoid'))
 
-# elif args.model=="cnn-lstm":   
+elif args.model=="cnn-lstm-paper-experiments":   
 
-#     model = Sequential()
-#     # define CNN model
-#     model.add((Conv1D(128, 5, activation='relu', input_shape=(shape,1))))
-        
-#     # define LSTM model
-#     model.add(LSTM(128, return_sequences=False))   
-#     # model.add(CuDNNLSTM(128, return_sequences=False))   #Colab Equivalent
-#     model.add(Dense(shape, activation='sigmoid'))
+    model = Sequential()
+    for layer in range(args.layers):
+        # define CNN model
+        model.add((Conv1D(args.neurons, 5, activation='relu', input_shape=(args.shape,1))))
+        model.add(Dense(args.neurons, activation='relu'))
+        # define LSTM model
+        model.add(chosen_lstm(args.neurons, return_sequences=True)) 
 
-elif args.model=="cnn-lstm-paper":   
+    model.add(Flatten())   
+    model.add(Dense(args.shape, activation='sigmoid'))
+
+
+elif args.model=="cnn-lstm-paper-original":   
 
     model = Sequential()
     # define CNN model
-    model.add((Conv1D(128, 5, activation='relu', input_shape=(shape,1))))
-    model.add((Conv1D(128, 5, activation='relu')))
-    model.add((Conv1D(128, 5, activation='relu')))
-    model.add((Conv1D(128, 5, activation='relu')))
-    model.add(Dense(shape, activation='relu'))
+    model.add((Conv1D(args.neurons, 5, activation='relu', input_shape=(args.shape,1))))
+    model.add((Conv1D(args.neurons, 5, activation='relu')))
+    model.add((Conv1D(args.neurons, 5, activation='relu')))
+    model.add((Conv1D(args.neurons, 5, activation='relu')))
+    model.add(Dense(args.shape, activation='relu'))    #!!!!!!!!CHANGE .shape to neurons (DOUBLE CHECK)
     # define LSTM model
-    model.add(chosen_lstm(128, return_sequences=True)) 
-    model.add(chosen_lstm(128, return_sequences=True))
+    model.add(chosen_lstm(args.neurons, return_sequences=True)) 
+    model.add(chosen_lstm(args.neurons, return_sequences=True))
     model.add(Flatten())   
     # model.add(CuDNNLSTM(128, return_sequences=False))   #Colab Equivalent
-    model.add(Dense(shape, activation='relu'))
-    model.add(Dense(shape, activation='relu'))
-    model.add(Dense(shape, activation='sigmoid'))
+    model.add(Dense(args.shape, activation='relu'))
+    model.add(Dense(args.shape, activation='relu'))
+    model.add(Dense(args.shape, activation='sigmoid'))
 
 
 else:
@@ -244,7 +247,7 @@ sio.savemat(output_dir+"output_"+(args.model), {'output_mode':pred_y,'output_mod
 
 # The threshold can be changed to generate ROC curve, in this file, the threshold is set as 0.5
 for i in range(x_test.shape[0]): #(2000)
-    for j in range (shape):
+    for j in range (args.shape):
         if pred_y[i][j]>0.5:
             pred_y[i][j]=1
         else:
@@ -265,7 +268,7 @@ model_stats.to_csv(output_dir+"stats_"+(args.model)+".csv")
 
 single_result={
 "Model": args.model,
-"Number of Units in a layer": units,
+"Number of Units in a layer": args.neurons,
 "Row Accuracy": row, 
 "Test Accuracy": acca,
 "Training Accuracy": history.history['accuracy'][-1],

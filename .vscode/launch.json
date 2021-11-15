@@ -19,10 +19,13 @@
             "console": "integratedTerminal",
             // "args":["--model", "DNN", "--n_epoch", "2","--data_dir", "/media/rabi/Data/11111/openuae/datafromdrive/data118_1.mat", "--output_dir", "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/"],
             "args": [
-                 "--model", "LSTM",
+                 "--model", "cnn-lstm-paper-experiments",
                  "--n_epoch", "1",
                  "--data_dir", "/media/rabi/Data/11111/openuae/data_ieee14_118_locational_detection/data14_1.mat",
-                 "--output_dir", "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/"                 
+                 "--output_dir", "/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/",
+                 "--layers", "1",
+                 "--neurons", "64", 
+                 "--shape", "19",
              ],
             "justMyCode": true
         }
