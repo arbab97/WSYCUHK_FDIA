@@ -12,6 +12,7 @@
 #https://stackoverflow.com/questions/62948332/how-to-add-attention-layer-to-a-bi-lstm/62949137#62949137 #Better version. of the ABOVE #!!!!!
 #https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
 #https://towardsdatascience.com/cnn-lstm-predicting-daily-hotel-cancellations-e1c75697f124
+
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Embedding
