@@ -47,5 +47,5 @@ all_results[["Model",
 "Neurons",
 "RACC", 
 "F1 Score",
-"Time Taken"]].to_csv(indiv_results_directory+"tradeoff.csv")
+"Time Taken"]].to_csv(indiv_results_directory+"tradeoff.csv", float_format='%.2f')
 print("Done")

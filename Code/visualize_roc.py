@@ -3,6 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import cycle
+import matplotlib as mlp
 
 from sklearn import svm, datasets
 from sklearn.metrics import roc_curve, auc
@@ -12,9 +13,12 @@ from sklearn.multiclass import OneVsRestClassifier
 from scipy import interp
 from sklearn.metrics import roc_auc_score
 import scipy.io as sio 
+font = {'family' : 'normal',
+        'size'   : 14}
+mlp.rc('font', **font)
 # Import some data to play with
 data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/"
-path=data_directory+"output_MLP"
+path=data_directory+"output_LSTM"
 pred_y= sio.loadmat(path)['output_mode']
 y_test= sio.loadmat(path)['output_mode_pred'] #ignore the naming; its messed up
 # Compute ROC curve and ROC area for each class
