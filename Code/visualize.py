@@ -5,18 +5,21 @@ import pandas as pd
 import sklearn.metrics as metrics
 import scipy.io as sio 
 from sklearn.metrics import f1_score
-data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/results_3_nov-20211103T044231Z-001/results_3_nov/cnn-lstm/"
+data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/variants_experiment/"
 metadata={
 
     "2axis" : { "file_name": "stats_cnn-lstm_118.csv",
                 "y_axis": ["Training Loss", "Validation Loss"],
                 "title": "Learning Curve for CNN+LSTM Model (IEEE-118)"
             },
+    "multiple_line_plot" : { "file_name": "variants_ieee118_old.csv",
+            "title": "Effect of L2 Norm on the Performance of Deep Learning Models"
+        },
 }
 
 
 
-plot_turn='2axis'
+plot_turn='multiple_line_plot'
 
 if plot_turn=='2axis':
     meta_selected=metadata[plot_turn]
@@ -67,6 +70,26 @@ elif plot_turn=='barplot':
     plt.show()
 
 
+if plot_turn=='multiple_line_plot':
+    meta_selected=metadata[plot_turn]
+    read_this=meta_selected["file_name"]
+    df=pd.read_csv(data_directory+read_this)
+    # multiple line plots
+    plt.plot( 'L2 Norm', 'MLP', data=df, marker='o',  color='green', linewidth=2, markersize=7, linestyle='dashed')
+    plt.plot( 'L2 Norm', 'CNN', data=df, marker="v", color='olive', linewidth=2,  markersize=7)
+    plt.plot( 'L2 Norm', 'LSTM', data=df, marker="^", color='red', linewidth=2,  markersize=7, linestyle='dashed')
+    plt.plot( 'L2 Norm', 'Attention', data=df, marker="<", color='blue', linewidth=2,  markersize=7)
+
+    # plt.ylim( 0, 100)
+    # plt.plot( 'x_values', 'y3_values', data=df, marker='', color='olive', linewidth=2, linestyle='dashed', label="toto")
+    # show legend
+    plt.legend()
+    plt.xlabel("L2 Norm")
+    plt.ylabel("Test Row Accuracy")
+    plt.title(meta_selected["title"])
+    # show graph
+    plt.show()
+        
 
     # plt.savefig(data_directory+ "All LSTM Models Commulative"+'.jpeg')
 # https://stackoverflow.com/questions/24183101/pandas-bar-plot-with-two-bars-and-two-y-axis

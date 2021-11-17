@@ -47,6 +47,14 @@ print("With Number of Epochs: ", str(args.n_epoch))
 
 
 
+######3
+from os.path import exists
+#Checking if the model already exist; then quit
+save_id=args.model+"_"+str(args.layers)+"_"+str(args.neurons)
+if exists (args.output_dir+"model_"+(save_id)):
+  print("------------------>>Model Already Exist<<-------------------- ")
+  exit()
+#########3
 
 # import tensorflow.compat.v1 as tf
 # tf.disable_v2_behavior()
@@ -280,7 +288,7 @@ all_results=all_results.append(single_result, ignore_index=True)
 
 # keras.backend.clear_session() #destroying the old model
 
-save_id=args.model+"_"+str(args.layers)+"_"+str(args.neurons)
+# save_id=args.model+"_"+str(args.layers)+"_"+str(args.neurons)
 #Save the learning curve stats
 model_stats.to_csv(output_dir+"stats_"+(save_id)+".csv")
 #Save the results
