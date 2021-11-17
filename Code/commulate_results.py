@@ -1,5 +1,6 @@
 
-import pandas as pd 
+import pandas as pd
+pd.set_option("display.precision", 2) 
 import numpy as np
 models=["MLP", "CNN", "LSTM", "Attention" ,"cnn-lstm-paper-experiments" ]
 layers=[1 ,2, 4]
@@ -13,7 +14,8 @@ all_results=pd.DataFrame(columns={
 "Layers",
 "Neurons",
 "RACC", 
-"Time Taken"}) 
+"Time Taken",
+"F1 Score"}) 
 
 
 ## now loop through the above array
@@ -28,8 +30,9 @@ for model in models:
             "Model":model,
             "Layers":layer,
             "Neurons":neuron,
-            "RACC":float(indiv_data["Row Accuracy"]),
-            "Time Taken":float(indiv_data["Time Taken"])
+            "RACC":float(indiv_data["Row Accuracy"])*100  ,
+            "Time Taken":float(indiv_data["Time Taken"])/60,
+            "F1 Score": float(indiv_data["F1 Score"]*100)
             }
             all_results=all_results.append(single_result, ignore_index=True)
             print(" Saved  ---------------------->",  model, layer, neuron)
@@ -43,5 +46,6 @@ all_results[["Model",
 "Layers",
 "Neurons",
 "RACC", 
+"F1 Score",
 "Time Taken"]].to_csv(indiv_results_directory+"tradeoff.csv")
 print("Done")
