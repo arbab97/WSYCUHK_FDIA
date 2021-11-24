@@ -5,7 +5,7 @@ import numpy as np
 models=["MLP", "CNN", "LSTM", "Attention" ,"cnn-lstm-paper-experiments" ]
 layers=[1 ,2, 4]
 neurons=[64 ,128 ,256]
-indiv_results_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/test/"
+indiv_results_directory="/content/drive/MyDrive/openUAE/locational detection/tradeoff_analysis/IEEE118/"
 
 
 

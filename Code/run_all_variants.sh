@@ -2,7 +2,7 @@
 #To change the bus: data_dir, output_dir, shape
 declare epochs=50
 declare -a variants=(1 2 3 4 5 )
-declare -a models=("MLP" "CNN" "LSTM" "Attention" "cnn-lstm-paper-experiments" )
+declare -a models=("MLP" "CNN" "LSTM" "cnn-lstm-paper-experiments" )
 declare -a layers=(2)
 declare -a neurons=(128)
 
@@ -15,14 +15,14 @@ do
     do
       for neuron in "${neurons[@]}"
       do
-        echo " Training ---------------------->  $model $layer $neuron   <----------------------------------------"
+        echo " Training ----------------------> $variant $model $layer $neuron   <----------------------------------------"
         
         export CUDA_VISIBLE_DEVICES=0 && source activate gpu && python /content/WSYCUHK_FDIA/Code/all_models.py  --model "$model" --n_epoch "$epochs" \
-        --data_dir "/content/drive/MyDrive/openUAE/locational detection/data_ieee14_118_locational_detection/data14_${variant}.mat" \
-        --output_dir "/content/drive/MyDrive/openUAE/locational detection/variant_analysis/IEEE14/${variant}/" \
+        --data_dir "/content/drive/MyDrive/openUAE/locational detection/data_ieee14_118_locational_detection/data118_${variant}.mat" \
+        --output_dir "/content/drive/MyDrive/openUAE/locational detection/variant_analysis/IEEE118/${variant}/" \
         --layers "$layer"\
         --neurons "$neuron"\
-        --shape 19
+        --shape 180
     # or do whatever with individual element of the array
       done
     done
