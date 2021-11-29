@@ -1,6 +1,6 @@
 
 declare epochs=50
-declare -a models=("MLP" "CNN" "LSTM" "cnn-lstm-paper-experiments" )
+declare -a models=("MLP" "CNN" "LSTM" "Attention" "cnn-lstm-paper-experiments")
 declare -a layers=(1 2)
 declare -a neurons=(64 128 256)
 
