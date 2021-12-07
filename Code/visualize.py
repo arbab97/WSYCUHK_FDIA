@@ -24,7 +24,7 @@ metadata={
 
 
 
-plot_turn='multiple_line_plot'
+plot_turn='barplot'
 
 if plot_turn=='2axis':
     meta_selected=metadata[plot_turn]
@@ -68,33 +68,44 @@ elif plot_turn=='2axis-2.0':
     plt.show()
         
 elif plot_turn=='barplot':
-    plt.rcParams.update({'font.size': 14})
-    df = pd.read_csv("/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/results_3_nov-20211103T044231Z-001/results_3_nov/results_ALL_ieee14_sub.csv")
+    # https://towardsdatascience.com/how-to-fill-plots-with-patterns-in-matplotlib-58ad41ea8cf8
+    plt.rcParams.update({'font.size': 11, 'font.family': 'Times New Roman'})
+    # df = pd.read_csv("/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/results_3_nov-20211103T044231Z-001/results_3_nov/results_ALL_ieee14_sub.csv")
+    df = pd.read_csv("/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/main_results/IEEE118_main_results.csv")
+    # fig = plt.figure() # Create matplotlib figure
+    fig, ax = plt.subplots(figsize=(8,5))
 
-    fig = plt.figure() # Create matplotlib figure
     fig.subplots_adjust(right=0.75)
     fig.subplots_adjust(bottom=0.2)
-    ax = fig.add_subplot(111) # Create matplotlib axes
+    # ax = fig.add_subplot(111) # Create matplotlib axes
     ax2 = ax.twinx() # Create another axes that shares the same x-axis as ax.
     ax3=ax.twinx()
-    ax3.spines['right'].set_position(("axes", 1.16))
 
-    width = 0.11
+    ax3.spines['right'].set_position(("axes", 1.25-0.1))
 
-    df["Time Taken"].plot(kind='bar', color='black', ax=ax, width=width, position=1)
-    df["Parameters"].plot(kind='bar', color='grey', ax=ax2, width=width, position=0)
-    df["Row Accuracy"].plot(kind='bar', color='red', ax=ax3, width=width, position=2)
+    width = 0.25
 
-    ax.set_ylabel('Time Taken (Seconds)')
+    df["Time Taken"].plot(kind='bar', color='black', ax=ax, width=width, position=1, fill=False, hatch='/')
+    df["Parameters"].plot(kind='bar', color='grey', ax=ax2, width=width, position=0, fill=False, hatch='x' )
+    df["Row Accuracy"].plot(kind='bar', color='red', ax=ax3, width=width, position=2, fill=False, hatch='///')
+
+    ax.set_ylabel('Time Taken (Minutes)')
     ax2.set_ylabel('\n Number of Parameters')
     ax3.set_ylabel('\n Row Accuracy')
-    ax.legend(loc='upper right', bbox_to_anchor=(0.9, 0.9))
-    ax2.legend(loc='upper right', bbox_to_anchor=(0.9, 0.97))
-    ax3.legend(loc='upper right', bbox_to_anchor=(0.9, 0.83))
+
+
+    # ax.legend(loc='upper right', bbox_to_anchor=(0.9, 0.9))
+    # ax2.legend(loc='upper right', bbox_to_anchor=(0.9, 0.97))
+    # ax3.legend(loc='upper right', bbox_to_anchor=(0.9, 0.83))
+
+    ax.legend(loc='upper center', bbox_to_anchor=(0.2-0.05, 1.12), fancybox=False, shadow=False, handlelength=2.5, handleheight=1.5)
+    ax2.legend(loc='upper center', bbox_to_anchor=(0.50-0.05, 1.12), fancybox=False, shadow=False, handlelength=2.5, handleheight=1.5)
+    ax3.legend(loc='upper center', bbox_to_anchor=(0.82-0.05, 1.12), fancybox=False, shadow=False, handlelength=2.5, handleheight=1.5)
 
     ax.set_xticklabels(df["Model"])
     ax.set_xlabel("Model Type")
-    plt.title("Comparision of Different Models")
+    # plt.title("Comparision of Different Models")
+    plt.gca().set(xlim=(-0.6,4.4))
     plt.show()
 
 
