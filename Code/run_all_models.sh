@@ -1,6 +1,10 @@
 
 declare epochs=50
+<<<<<<< HEAD
 declare -a models=("MLP" "CNN" "LSTM" "cnn-lstm-paper-experiments" )
+=======
+declare -a models=("MLP" "CNN" "LSTM" "Attention" "cnn-lstm-paper-experiments")
+>>>>>>> 0de46904976c41464f29977111aa48a8824646f6
 declare -a layers=(1 2)
 declare -a neurons=(64 128 256)
 
