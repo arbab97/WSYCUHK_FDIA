@@ -7,14 +7,14 @@ import sklearn.metrics as metrics
 import scipy.io as sio 
 from sklearn.metrics import f1_score
 # data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/variants_experiment/"
-data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/test/"
+data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/variants_experiment/"
 metadata={
 
     "2axis" : { "file_name": "stats_CNN_2_128.csv",
                 "y_axis": ["Training Loss", "Validation Loss"],
                 "title": "Learning Curve for CNN+LSTM Model (IEEE-118)"
             },
-    "multiple_line_plot" : { "file_name": "variants_ieee118_old.csv",
+    "multiple_line_plot" : { "file_name": "variants_ieee14.csv",
             "title": "Effect of L2 Norm on the Performance of Deep Learning Models"
         },
     "2axis-2.0" : { "file_name": "stats_CNN_2_128.csv",
@@ -24,7 +24,7 @@ metadata={
 
 
 
-plot_turn='2axis'
+plot_turn='multiple_line_plot'
 
 if plot_turn=='2axis':
     meta_selected=metadata[plot_turn]
@@ -103,10 +103,10 @@ if plot_turn=='multiple_line_plot':
     read_this=meta_selected["file_name"]
     df=pd.read_csv(data_directory+read_this)
     # multiple line plots
-    plt.plot( 'L2 Norm', 'MLP', data=df, marker='o',  color='green', linewidth=2, markersize=7, linestyle='dashed')
-    plt.plot( 'L2 Norm', 'CNN', data=df, marker="v", color='olive', linewidth=2,  markersize=7)
-    plt.plot( 'L2 Norm', 'LSTM', data=df, marker="^", color='red', linewidth=2,  markersize=7, linestyle='dashed')
-    plt.plot( 'L2 Norm', 'Attention', data=df, marker="<", color='blue', linewidth=2,  markersize=7)
+    plt.plot( 'L2 Norm', 'MLP', data=df, marker='o',  color='green', linewidth=1.5, markersize=7, linestyle='dashed')
+    plt.plot( 'L2 Norm', 'CNN', data=df, marker="v", color='olive', linewidth=1.5,  markersize=7)
+    plt.plot( 'L2 Norm', 'LSTM', data=df, marker="^", color='red', linewidth=1.5,  markersize=7, linestyle='dashed')
+    plt.plot( 'L2 Norm', 'CNN-LSTM', data=df, marker="<", color='blue', linewidth=1.5,  markersize=7)
 
     # plt.ylim( 0, 100)
     # plt.plot( 'x_values', 'y3_values', data=df, marker='', color='olive', linewidth=2, linestyle='dashed', label="toto")
