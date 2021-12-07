@@ -35,7 +35,7 @@ for model in models:
             print (" Not Found ---------------------->",  model, layer, neuron)
 
 #Sort and secondary sort the results
-all_results.sort_values(['Model','RACC' ], ascending=[True])
+# all_results.sort_values(['RACC' ], ascending=[ True])
 #Save all_results
 all_results[["Model",
 "RACC", 
