@@ -17,8 +17,8 @@ font = {'family' : 'normal',
         'size'   : 14}
 mlp.rc('font', **font)
 # Import some data to play with
-data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/"
-path=data_directory+"output_LSTM"
+data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/main_results/lc and roc of main models/14_attention/"
+path=data_directory+"output_Attention_2_128"
 pred_y= sio.loadmat(path)['output_mode']
 y_test= sio.loadmat(path)['output_mode_pred'] #ignore the naming; its messed up
 # Compute ROC curve and ROC area for each class

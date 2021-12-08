@@ -7,7 +7,7 @@ import sklearn.metrics as metrics
 import scipy.io as sio 
 from sklearn.metrics import f1_score
 # data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/variants_experiment/"
-data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/variants_experiment/"
+data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/main_results/lc and roc of main models/14/"
 metadata={
 
     "2axis" : { "file_name": "stats_CNN_2_128.csv",
@@ -17,14 +17,14 @@ metadata={
     "multiple_line_plot" : { "file_name": "variants_ieee14.csv",
             "title": "Effect of L2 Norm on the Performance of Deep Learning Models"
         },
-    "2axis-2.0" : { "file_name": "stats_CNN_2_128.csv",
+    "2axis-2.0" : { "file_name": "stats_MLP_2_128.csv",
             "title": "Learning Curve"
         },
 }
 
 
 
-plot_turn='barplot'
+plot_turn='2axis-2.0'
 
 if plot_turn=='2axis':
     meta_selected=metadata[plot_turn]

@@ -21,10 +21,10 @@ for i in range(1,6):
     # Draw the density plot
     sns.distplot(attacks_per_node, hist = False, kde = True,
                  kde_kws = {'linewidth': 2},
-                 label ="Dataset (for IEEE-118) Variant: "+  str(i))
+                 label ="$L_{2}-norm$="+  str(i))
     
 # Plot formatting
-plt.legend(prop={'size': 10}, title = '...')
+plt.legend(prop={'size': 13}, title = 'Dataset Variant', loc ='upper right')
 plt.title('Distribution of Compromised Nodes in IEEE-118')
 plt.xlabel('Number of Compromised nodes (out of 180)')
 plt.ylabel('Density')
