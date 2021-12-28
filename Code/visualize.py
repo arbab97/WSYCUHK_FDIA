@@ -6,16 +6,17 @@ import pandas as pd
 import sklearn.metrics as metrics
 import scipy.io as sio 
 from sklearn.metrics import f1_score
-# data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/variants_experiment/"
-data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/main_results/lc and roc of main models/14/"
+data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/variants_experiment/"  #FOR VARIANTS 
+#data_directory="/media/rabi/Data/11111/openuae/WSYCUHK_FDIA_results_3_Nov/main_results/lc and roc of main models/14/"  #FOR MAIN RESULTS
+
 metadata={
 
     "2axis" : { "file_name": "stats_CNN_2_128.csv",
                 "y_axis": ["Training Loss", "Validation Loss"],
                 "title": "Learning Curve for CNN+LSTM Model (IEEE-118)"
             },
-    "multiple_line_plot" : { "file_name": "variants_ieee14.csv",
-            "title": "Effect of L2 Norm on the Performance of Deep Learning Models"
+    "multiple_line_plot" : { "file_name": "variants_ieee118.csv",
+            "title": "Effect of $L_{2}$-norm on Performance for IEEE-118"
         },
     "2axis-2.0" : { "file_name": "stats_Attention_2_128.csv",
             "title": "Learning Curve for Attention (Least Performing model)"
@@ -24,7 +25,7 @@ metadata={
 
 
 
-plot_turn='2axis-2.0'
+plot_turn='multiple_line_plot'
 
 if plot_turn=='2axis':
     meta_selected=metadata[plot_turn]
@@ -113,6 +114,7 @@ elif plot_turn=='barplot':
 
 
 if plot_turn=='multiple_line_plot':
+    plt.rcParams.update({'font.size': 14, 'font.family': 'Times New Roman'})
     meta_selected=metadata[plot_turn]
     read_this=meta_selected["file_name"]
     df=pd.read_csv(data_directory+read_this)
@@ -125,10 +127,10 @@ if plot_turn=='multiple_line_plot':
     # plt.ylim( 0, 100)
     # plt.plot( 'x_values', 'y3_values', data=df, marker='', color='olive', linewidth=2, linestyle='dashed', label="toto")
     # show legend
-    plt.legend()
-    plt.xlabel("L2 Norm")
+    plt.legend(fontsize=11)
+    plt.xlabel("$L_{2}$-norm")
     plt.ylabel("Test Row Accuracy")
-    plt.title(meta_selected["title"])
+    plt.title(meta_selected["title"], fontsize=14)
     # show graph
     plt.show()
         
