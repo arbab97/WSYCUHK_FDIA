@@ -57,10 +57,20 @@ This contains the code for loading, preprocessing and setting the architecture o
       --shape B`
 
 ## Commulating results from saved models
-### `Colab Driver Scripts`
+### `Locational Detection Supplementry Script.ipynb`
 
 ## Visualisation  #upload all figures && source CSV files   THEN EXPLAIN:
-### Fig.1 
+#### Figure: Comparison between Conventional and Smart Grid
+Source file is provided in `figures` folder
+
+#### Figure: Single LSTM Cell
+Source file is provided in `figures` folder
+
+
+#### Figure: Distribution of Compromised Nodes in IEEE-18 Bus System
+Use `visualize_distribution`
+
+
 ### Fig.1 
 ### Fig.1 
 ### Fig.1 
