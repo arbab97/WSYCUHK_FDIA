@@ -15,7 +15,7 @@ Download the Trained models For Variant Analysis [Here](https://drive.google.com
 
 For two Bus Systems (IEEE-14 and IEEE-118), Five different variants of dataset are present , which differ in their L-2 Norm.
 
-The Dataset is adopted from  [Here](https://github.com/arbab97/WSYCUHK_FDIA)
+The Dataset is adapted from  [Here](https://github.com/arbab97/WSYCUHK_FDIA)
 
 
 ## Requirements and Installation
