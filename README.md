@@ -5,6 +5,14 @@
 Download the data from below and copy it inside your google drive. 
 [Click Here](https://drive.google.com/drive/folders/1aryy2jZXwGlRQS-Hh8_CzjO2Mqq_Pg8k?usp=sharing)
 
+Download the results and output summary files 
+[Here](https://drive.google.com/drive/folders/1a-kdXNuLUFz2sxxxgfgn7O0Jy7bAJG9-?usp=sharing)
+
+Download the Trained models For Tradeoff Analysis [Here](https://drive.google.com/drive/folders/1sjSekF13ypKEPIrtjM2eW8rqV10UIyld?usp=sharing)
+
+Download the Trained models For Variant Analysis [Here](https://drive.google.com/drive/folders/1ev97Eef62JAzIoIC1nknl4_W6tTnY7RK?usp=sharing)
+
+
 For two Bus Systems (IEEE-14 and IEEE-118), Five different variants of dataset are present , which differ in their L-2 Norm.
 
 The Dataset is adopted from  [Here](https://github.com/arbab97/WSYCUHK_FDIA)
@@ -38,7 +46,7 @@ This python notebook sets the environment for training the models and fetches co
 For convenience, this could be run on google colab.  
 
 
-#### `run_all_models.sh`
+#### `code/run_all_models.sh`
 This shell script is a driver code for `all_models.py` and the following could be selected from here, for running a combination of traiings (as required for tradeoff and variant analysis:
 * Epochs
 * Model
@@ -46,7 +54,7 @@ This shell script is a driver code for `all_models.py` and the following could b
 * Number of Neurons
 
 
-#### `all_models.py`
+#### `code/all_models.py`
 This contains the code for loading, preprocessing and setting the architecture of models.  The following is the format to use this script. 
 
       `export CUDA_VISIBLE_DEVICES=0 && source activate gpu && python ...Code/all_models.py  --model "$model" --n_epoch "$epochs" \
@@ -68,7 +76,14 @@ Source file is provided in `figures` folder
 
 
 #### Figure: Distribution of Compromised Nodes in IEEE-18 Bus System
-Use `visualize_distribution`
+Use `code/visualize_distribution.py`. Edit the `data_dir` variable to the path of IEEE-118 dataset. 
+
+#### Figure: Learning Curve of Best and Worst Performing Models for IEEE-14 Bus System
+Use `Code/Visualise.py` and make following changes:
+* Set `plot_turn` variable to `2axis-2.0`
+* Edit the `data_directory` to `Results/main_results/lc and roc of main models/14/"`
+
+
 
 
 ### Fig.1 
