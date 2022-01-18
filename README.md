@@ -83,6 +83,29 @@ Use `Code/Visualise.py` and make following changes:
 * Set `plot_turn` variable to `2axis-2.0`
 * Edit the `data_directory` to `Results/main_results/lc and roc of main models/14/"`
 
+#### Figure: Learning Curve of Best and Worst Performing Models for IEEE-118 Bus System
+Use `Code/Visualise.py` and make following changes:
+* Set `plot_turn` variable to `2axis-2.0`
+* Edit the `data_directory` to `{Results Directory}/main_results/lc and roc of main models/118/"`
+
+#### Comparison of Different Models for IEEE-14 Bus System
+Use `Code/Visualise.py` and make following changes:
+* Set `plot_turn` variable to `bar_plot`
+* Edit the path in line `78` to `{Results Directory}/main_results/IEEE14_main_results.csv"`
+
+#### Comparison of Different Models for IEEE-118 Bus System
+Use `Code/Visualise.py` and make following changes:
+* Set `plot_turn` variable to `bar_plot`
+* Edit the path in line `78` to `{Results Directory}/main_results/IEEE118_main_results.csv"`
+
+#### Effect of 𝑙2-normon performance(for IEEE-14 and 118 Bus System)
+Use `Code/Visualise.py` and make following changes:
+* Set `plot_turn` variable to `multiple_line_plot`
+* Edit the `data_directory` to `{Results Directory}/variants_experiment/"`
+* Adjust the field `file_name` at line `18` accordintly 
+
+
+
 
 
 
