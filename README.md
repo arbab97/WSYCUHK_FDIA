@@ -64,10 +64,16 @@ This contains the code for loading, preprocessing and setting the architecture o
       --neurons "$neuron"\
       --shape B`
 
-## Commulating results from saved models
-### `Locational Detection Supplementry Script.ipynb`
+## Commulating results from saved models using `Locational Detection Supplementry Script.ipynb`
+This script commulate results for three analysis:
+#### 1) `commulate_results.py`:
+This is used to commulate results for tradeoff analysis
+#### 1) `commulate_results_for_variants.py`:
+This is used to for variant analysis results 
+#### 1) `commulate_results_main_models.py`: 
+This is used for individual model. Please note that this script uses the models already trained during tradeoff analysis. The default model selected here had 2 layers and 128 neurons/layer. 
 
-## Visualisation  #upload all figures && source CSV files   THEN EXPLAIN:
+## Visualisation  
 #### Figure: Comparison between Conventional and Smart Grid
 Source file is provided in `figures` folder
 
