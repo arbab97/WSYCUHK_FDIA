@@ -17,6 +17,12 @@ All the requirements are given in `gpu.yml`. However the environment will be set
 
 `conda env create -f gpu.yml` 
 
+Few important dependencies include:
+* TensorFlow(version  1.15.2) 
+* Keras(version 2.3.1) 
+* Pandas  (version  1.1.3)  
+* NumPy (version    1.18.1) 
+
 ## Training Data
 ### The training data file contains：
 For training, the input data (x_train) has diemensions 110000×B and output values (y_train) also has dimensions of for all variants of dataset. 
@@ -27,11 +33,28 @@ where B represent the nunmber of readings of Bus size, i.e., 19 for IEEE-14 and 
 
 
 ## Running the Models
-### `Locational Detection main script.ipynb`
-### `run_all_models.sh`
-### `all_models.py`
+#### `Locational Detection main script.ipynb`
+This python notebook sets the environment for training the models and fetches code from github. It also connects the google drive to the notebook so that the data could be fetched directly from there. This code includes the training for tradeoff analysis, variants analysis and results from individual models. 
+For convenience, this could be run on google colab.  
 
 
+#### `run_all_models.sh`
+This shell script is a driver code for `all_models.py` and the following could be selected from here, for running a combination of traiings (as required for tradeoff and variant analysis:
+* Epochs
+* Model
+* Number of layers
+* Number of Neurons
+
+
+#### `all_models.py`
+This contains the code for loading, preprocessing and setting the architecture of models.  The following is the format to use this script. 
+
+      `export CUDA_VISIBLE_DEVICES=0 && source activate gpu && python ...Code/all_models.py  --model "$model" --n_epoch "$epochs" \
+      --data_dir "/select/the/path/to/dataset/file" \
+      --output_dir "store/results/here" \
+      --layers "$layer"\
+      --neurons "$neuron"\
+      --shape B`
 
 ## Commulating results from saved models
 ### `Colab Driver Scripts`
