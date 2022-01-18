@@ -38,6 +38,15 @@ For testing, the input data(x_test) and output data (y_test) have dimensions 100
 
 where B represent the nunmber of readings of Bus size, i.e., 19 for IEEE-14 and 180 for IEEE-118 Bus System
 
+### Generation of dataset
+
+The following exceprt from paper explains the generation of the dataset. 
+•	The load was simulated on each bus. In terms of distribution of readings, these were normally distributed with their mean equal to the input load, and variance was set to be one-sixth of that value.
+•	Nodes were selected randomly to generate the FDIA.
+•	A set of target state variables (distributed from 2 to 5 for IEEE-14 and from 2 to 10 for IEEE-118 bus system) was chosen to attack at random to generate compromised readings.
+•	Now, to generate the compromised readings, it was required that they pass the BDD process, which is employed as a standard defense mechanism technique in smart meters. To achieve this purpose, injection attack data based on the work done by Suzhi Bi et al. [22], which required only incomplete information of the network topology via min-cut strategy, was used.
+•	Finally, to take into consideration the noise in measurement encountered practical conditions, a random gaussian noise (with a standard deviation of 0.2) was added in both the attacked and original readings.
+
 
 
 ## Running the Models
