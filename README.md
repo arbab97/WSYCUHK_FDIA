@@ -16,15 +16,23 @@ All the requirements are given in 'gpu.yml'. However the environment will be set
 {here paste steps for data generation} and cite the locational detection paper
 
 
-##Running the Models
-`Locational Detection main script.ipynb`
-`run_all_models.sh`
-`all_models.py`
+## Running the Models
+### `Locational Detection main script.ipynb`
+### `run_all_models.sh`
+### `all_models.py`
 
 
 
-#Commulating results from saved models
-`Colab Driver Scripts`
+## Commulating results from saved models
+### `Colab Driver Scripts`
+
+## Visualisation  #upload all figures && source CSV files   THEN EXPLAIN:
+### Fig.1 
+### Fig.1 
+### Fig.1 
+### Fig.1 
+### Fig.1 
+### Fig.1 
 
 
-### Thank You for Reading!!!
+### -------------------------------------------------------
